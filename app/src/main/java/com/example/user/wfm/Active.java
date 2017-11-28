@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -65,6 +66,7 @@ public class Active extends Fragment {
 
 
                 final Dialog dialog = new Dialog(getActivity());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog);
                 dialog.setCancelable(true);
                 dialog.show();
@@ -101,6 +103,7 @@ public class Active extends Fragment {
 
 
                 final Dialog dialog = new Dialog(getActivity());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.failed_delivery);
                 dialog.setCancelable(true);
                 dialog.show();
