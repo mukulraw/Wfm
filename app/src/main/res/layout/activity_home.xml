@@ -26,7 +26,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:src="@drawable/logo"
+            android:src="@drawable/logoooo"
             android:layout_centerInParent="true"
            />
 

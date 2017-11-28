@@ -141,17 +141,17 @@ public class Active extends Fragment {
 
                 int selectedId = radioGroup.getCheckedRadioButtonId();
 
-                if (selectedId == R.id.paytmmm){
+                if (selectedId == R.id.credit){
 
                     Log.d("ytryr" , "dyhgfj");
 
-                    paytm.setVisibility(View.VISIBLE);
-                    bank.setVisibility(View.GONE);
-                }
-                else if (selectedId == R.id.credit){
-
-                    bank.setVisibility(View .VISIBLE);
+                    bank.setVisibility(View.VISIBLE);
                     paytm.setVisibility(View.GONE);
+                }
+                else if (selectedId == R.id.paytmmm){
+
+                    paytm.setVisibility(View .VISIBLE);
+                    bank.setVisibility(View.GONE);
                 }
 
                 else if (selectedId == R.id.cash){
