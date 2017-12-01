@@ -1,16 +1,13 @@
-package com.example.user.wfm.PreviousPOJO;
+package com.example.user.wfm.UpdatePOJO;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 /**
- * Created by USER on 11/30/2017.
+ * Created by TBX on 12/1/2017.
  */
 
-public class PreviousBean {
-
+public class UpdateBean {
 
     @SerializedName("status")
     @Expose
@@ -20,7 +17,7 @@ public class PreviousBean {
     private String message;
     @SerializedName("data")
     @Expose
-    private List<Datum> data = null;
+    private Data data;
 
     public String getStatus() {
         return status;
@@ -38,12 +35,13 @@ public class PreviousBean {
         this.message = message;
     }
 
-    public List<Datum> getData() {
+    public Data getData() {
         return data;
     }
 
-    public void setData(List<Datum> data) {
+    public void setData(Data data) {
         this.data = data;
     }
+
 
 }

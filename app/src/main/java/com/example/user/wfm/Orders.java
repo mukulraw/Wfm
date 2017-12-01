@@ -28,7 +28,6 @@ public class Orders extends Fragment {
 
         View view = inflater.inflate(R.layout.orders , container , false);
 
-
         tabs = (TabLayout)view.findViewById(R.id.tabs);
 
         pager = (ViewPager)view.findViewById(R.id.pager);

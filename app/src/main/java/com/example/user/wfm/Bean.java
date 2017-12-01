@@ -16,6 +16,7 @@ public class Bean extends Application {
     public String latitude = "";
     public String longitude = "";
     public String battery = "";
+    public String username = "";
 
 
 

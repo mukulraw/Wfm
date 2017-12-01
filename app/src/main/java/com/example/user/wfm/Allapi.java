@@ -5,9 +5,11 @@ import com.example.user.wfm.LoginPOJO.LoginBean;
 import com.example.user.wfm.OrderUpdatePOJO.OrderUpdateBean;
 import com.example.user.wfm.PreviousPOJO.PreviousBean;
 import com.example.user.wfm.UndeliveredStatusPOJO.UndeliveredBean;
+import com.example.user.wfm.UpdatePOJO.UpdateBean;
 import com.example.user.wfm.UpdateTrack.UpdateTrackBean;
 
 import retrofit2.Call;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -31,57 +33,61 @@ public interface Allapi {
     );
 
 
-
     @Multipart
-    @POST("waschen_api/sign_up.php")
+    @POST("courier/apiapp/activeorders.php")
     Call<ActiveBean> active (
-            @Part("email") String m
+            @Part("username") String m
 
 
     );
 
 
 
-
     @Multipart
-    @POST("waschen_api/sign_up.php")
+    @POST("courier/apiapp/previousorder.php")
     Call<PreviousBean> previous (
-            @Part("email") String m ,
-            @Part("password") String c
+            @Part("username") String m
 
-    );
-
-
-
-
-    @Multipart
-    @POST("waschen_api/sign_up.php")
-    Call<OrderUpdateBean> order (
-            @Part("email") String m ,
-            @Part("password") String c
 
     );
 
 
 
     @Multipart
-    @POST("waschen_api/sign_up.php")
+    @POST("courier/apiapp/updateorder.php")
+    Call<UpdateBean> order (
+            @Part("username") String m ,
+            @Part("awbNo") String a,
+            @Part("paymentMode") String p,
+            @Part("status") String s,
+            @Part("value") String v,
+            @Part("IMEI") String i,
+            @Part("deviceId") String d,
+            @Part("latitude") String l,
+            @Part("longitude") String lo,
+            @Part("battery") String b,
+            @Part("undeliveredStatus") String under
+
+    );
+
+
+    @GET("courier/apiapp/statusList.php")
     Call<UndeliveredBean> undelivered (
-            @Part("email") String m ,
-            @Part("password") String c
 
     );
-
-
 
     @Multipart
-    @POST("waschen_api/sign_up.php")
-    Call<UpdateTrackBean> update (
-            @Part("email") String m ,
-            @Part("password") String c
+    @POST("courier/apiapp/updatetrack.php")
+    Call<UpdateTrackBean> track (
+            @Part("username") String m ,
+            @Part("latitude") String a,
+            @Part("longitude") String p,
+            @Part("battery") String s,
+            @Part("IMEI") String v,
+            @Part("deviceId") String i
+
 
     );
-
 
 
 

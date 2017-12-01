@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar bar;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
                         int battery = easyBatteryMod.getBatteryPercentage();
 
+                        Log.d("dfglkd" , "hlo");
 
                         bar.setVisibility(View.VISIBLE);
 
@@ -114,8 +117,13 @@ public class MainActivity extends AppCompatActivity {
 
                                 if (Objects.equals(response.body().getStatus() , "1")){
 
+                                    Bean b = (Bean)getApplicationContext();
+                                    b.username = response.body().getData().getUsername();
+
                                     Intent i = new Intent(MainActivity .this , Home.class);
                                     startActivity(i);
+
+
 
 
                                     Log.d("fgblkdfh" , "fdhbgf");

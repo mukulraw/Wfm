@@ -46,4 +46,5 @@ public class UndeliveredBean {
         this.data = data;
     }
 
+
 }

@@ -9,6 +9,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.user.wfm.PreviousPOJO.Datum;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by USER on 11/27/2017.
  */
@@ -18,10 +23,13 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.MyView
 
     Context context;
 
-    public PreviousAdapter(Context context){
+    List<Datum>list = new ArrayList<>();
+
+    public PreviousAdapter(Context context ,  List<Datum>list){
 
 
         this.context = context;
+        this.list = list;
     }
 
 
@@ -38,7 +46,15 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.MyView
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-
+        Datum item = list.get(position);
+        holder.name.setText(item.getCustomerName());
+        holder.contact.setText(item.getContactNo());
+        holder.address.setText(item.getAdddress());
+        holder.date.setText(item.getDate());
+        holder.number.setText(item.getAWBNo());
+        holder.type.setText(item.getPaymenttype());
+        holder.mode.setText(item.getPaymentMode());
+        holder.bankname.setText(item.getValue());
 
 
         holder.down.setOnClickListener(new View.OnClickListener() {
@@ -63,15 +79,22 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.MyView
 
     }
 
+    public void setgrid( List<Datum>list){
+
+
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
-        return 12;
+        return list.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
 
-        TextView name  , contact , address , date , number;
+        TextView name  , contact , address , date , number  , bankname , type , mode;
 
         ImageView down;
 
@@ -90,6 +113,12 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.MyView
             number = (TextView)itemView.findViewById(R.id.number);
 
             date = (TextView)itemView.findViewById(R.id.date);
+
+            type = (TextView)itemView.findViewById(R.id.type);
+
+            mode = (TextView)itemView.findViewById(R.id.mode);
+
+            bankname = (TextView)itemView.findViewById(R.id.bankname);
 
             down = (ImageView) itemView.findViewById(R.id.down);
 

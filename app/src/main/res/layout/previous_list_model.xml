@@ -39,7 +39,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="AWD NO."
+                    android:text="AWB NO."
                     android:textColor="#000"
                     android:layout_gravity="center"
                     android:gravity="center"/>
@@ -389,6 +389,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="20 May 2017"
+                    android:id="@+id/date1"
                     android:textColor="#000"/>
 
             </LinearLayout>
@@ -406,6 +407,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="12:30P.M"
+                    android:id="@+id/pm"
                     />
 
             </LinearLayout>
@@ -433,7 +435,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/linear"
-            android:visibility="gone">
+            android:visibility="visible">
 
 
             <TextView
@@ -495,7 +497,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Bank Name :"
+                        android:text="Value :"
                         />
 
                 </LinearLayout>
@@ -524,6 +526,7 @@
                         android:layout_height="wrap_content"
                         android:text="Cash On Delivery"
                         android:layout_gravity="center"
+                        android:id="@+id/type"
                         />
 
                 </LinearLayout>
@@ -540,6 +543,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Card"
+                        android:id="@+id/mode"
                         />
 
                 </LinearLayout>
@@ -555,6 +559,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="SBI"
+                        android:id="@+id/bankname"
                         />
 
                 </LinearLayout>
@@ -563,8 +568,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
-
 
 </android.support.v7.widget.CardView>
 

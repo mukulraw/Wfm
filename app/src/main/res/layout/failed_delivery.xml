@@ -22,20 +22,26 @@
         android:orientation="vertical"
     >
 
-
-
-
-        <EditText
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/down"
-            android:textSize="12sp"
-            android:id="@+id/selectdelivery"
+            android:background="@drawable/cdcdcd_stroke"
             android:layout_marginTop="20sp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:hint="Select a reason for not delivery"/>
+            android:padding="5dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp">
 
+
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/selectdelivery"
+
+           />
+
+
+        </RelativeLayout>
         <TextView
             android:id="@+id/confirm"
             android:layout_width="match_parent"

@@ -72,7 +72,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:gravity="center"
-                                android:text="AWD NO."
+                                android:text="AWB NO."
                                 android:textSize="13sp"
                                 android:textColor="#000" />
 
@@ -392,14 +392,30 @@
                 </android.support.v7.widget.CardView>
 
 
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Rs. 240"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:textSize="24sp"
+                    android:id="@+id/amount"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                   android:textColor="#7CB342"/>
+
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
                     android:padding="2dp"
                     android:paddingStart="5dp"
+                    android:id="@+id/mode"
                     android:text="PAYMENT MODE"
                     android:textColor="#000"
                     android:textSize="12sp"
@@ -409,6 +425,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="3dp"
+                    android:id="@+id/card"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
                     app:cardUseCompatPadding="true">
@@ -589,6 +606,13 @@
 
 
         </LinearLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progress"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
 
 

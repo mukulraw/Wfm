@@ -1,13 +1,14 @@
-package com.example.user.wfm.PreviousPOJO;
+package com.example.user.wfm.UpdatePOJO;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by USER on 11/30/2017.
+ * Created by TBX on 12/1/2017.
  */
 
-public class Datum {
+public class Data {
+
 
     @SerializedName("AWB_no")
     @Expose
