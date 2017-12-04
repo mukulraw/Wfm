@@ -2,12 +2,15 @@ package com.example.user.wfm;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,7 +46,8 @@ public class Splash extends AppCompatActivity {
     ProgressBar bar;
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
-    String[] PERMISSIONS = {Manifest.permission.READ_PHONE_STATE , ACCESS_COARSE_LOCATION};
+    String[] PERMISSIONS = {android.Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION , Manifest.permission.READ_PHONE_STATE};
+
 
 
     @Override
@@ -57,7 +61,10 @@ public class Splash extends AppCompatActivity {
         bar = (ProgressBar) findViewById(R.id.progress);
 
         if (hasPermissions(this, PERMISSIONS)) {
+
             startApp();
+
+
         } else {
             ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_CODE_ASK_PERMISSIONS);
         }
@@ -82,12 +89,12 @@ public class Splash extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == REQUEST_CODE_ASK_PERMISSIONS) {
-            if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
 
                 startApp();
 
             } else {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
 
                     Toast.makeText(getApplicationContext(), "Permissions are required for this app", Toast.LENGTH_SHORT).show();
                     finish();
@@ -105,114 +112,151 @@ public class Splash extends AppCompatActivity {
 
         }
 
-
     }
 
+    private void showGPSDisabledAlertToUser(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Goto Settings Page To Enable GPS",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivityForResult(callGPSSettingIntent , 12);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        Toast.makeText(getApplicationContext() , "GPS is required for this app", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                        finish();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+
+
+
+
+
     public void startApp() {
-        String e = pref.getString("email", "");
-        String p = pref.getString("pass", "");
 
 
-        if (e.length() > 0 && p.length() > 0) {
+                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
 
-            EasyDeviceMod easyDeviceMod = new EasyDeviceMod(Splash.this);
-
-            EasyLocationMod easyLocationMod = new EasyLocationMod(Splash.this);
-
-            EasyBatteryMod easyBatteryMod = new EasyBatteryMod(Splash.this);
-
-            if (ActivityCompat.checkSelfPermission(Splash.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            String imei = easyDeviceMod.getIMEI();
-
-            String device = easyDeviceMod.getDevice();
-
-            //Get Lat-Long
-            double[] l = easyLocationMod.getLatLong();
-            String lat = String.valueOf(l[0]);
-            String lon = String.valueOf(l[1]);
+            String e = pref.getString("email", "");
+            String p = pref.getString("pass", "");
 
 
-            int battery = easyBatteryMod.getBatteryPercentage();
+            if (e.length() > 0 && p.length() > 0) {
 
 
+                EasyDeviceMod easyDeviceMod = new EasyDeviceMod(Splash.this);
+
+                EasyLocationMod easyLocationMod = new EasyLocationMod(Splash.this);
+
+                EasyBatteryMod easyBatteryMod = new EasyBatteryMod(Splash.this);
+
+                if (ActivityCompat.checkSelfPermission(Splash.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                String imei = easyDeviceMod.getIMEI();
+
+                String device = easyDeviceMod.getDevice();
+
+                //Get Lat-Long
+                double[] l = easyLocationMod.getLatLong();
+                String lat = String.valueOf(l[0]);
+                String lon = String.valueOf(l[1]);
 
 
+                int battery = easyBatteryMod.getBatteryPercentage();
 
-            bar.setVisibility(View.VISIBLE);
+                bar.setVisibility(View.VISIBLE);
 
-            Bean b = (Bean) getApplicationContext();
+                Log.d("lkghb", "gfjkl");
 
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.baseURL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+                Bean b = (Bean) getApplicationContext();
 
-            Allapi cr = retrofit.create(Allapi.class);
-            Call<LoginBean> call = cr.login(e , p , imei ,device ,  lat , lon ,String.valueOf( battery) );
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.baseURL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
 
-            call.enqueue(new Callback<LoginBean>() {
-                @Override
-                public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
+                Allapi cr = retrofit.create(Allapi.class);
+                Call<LoginBean> call = cr.login(e, p, imei, device, lat, lon, String.valueOf(battery));
+
+                call.enqueue(new Callback<LoginBean>() {
+                    @Override
+                    public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
+
+                        Log.d("lkjfdgh", "response");
+
+                        if (Objects.equals(response.body().getStatus(), "1"))
+
+                        {
+
+                            Toast.makeText(Splash.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                            Bean b = (Bean) getApplicationContext();
+                            b.username = response.body().getData().getUsername();
+
+                            Intent i = new Intent(Splash.this, Home.class);
+                            startActivity(i);
+                            finish();
+
+                            bar.setVisibility(View.GONE);
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<LoginBean> call, Throwable t) {
+
+                        bar.setVisibility(View.GONE);
+
+                        Log.d("hgf", t.toString());
+
+                    }
+                });
+
+            } else {
 
 
-                    if (Objects.equals(response.body().getStatus(), 1))
-
-                    {
-
-                        Toast.makeText(Splash.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-
-                        Bean b = (Bean) getApplicationContext();
-                        b.username = response.body().getData().getUsername();
-
-                        Log.d("skjg", "response");
-
+                time = new Timer();
+                time.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
 
                         Intent i = new Intent(Splash.this, MainActivity.class);
                         startActivity(i);
                         finish();
 
-                        bar.setVisibility(View.GONE);
                     }
+                }, 1500);
 
-
-                }
-
-                @Override
-                public void onFailure(Call<LoginBean> call, Throwable t) {
-
-                    bar.setVisibility(View.GONE);
-
-
-                }
-            });
-        } else {
-
-
-            time = new Timer();
-            time.schedule(new TimerTask() {
-                @Override
-                public void run() {
-
-                    Intent i = new Intent(Splash.this, MainActivity.class);
-                    startActivity(i);
-                    finish();
-
-                }
-            }, 1500);
+            }
 
         }
 
+        else{
+            showGPSDisabledAlertToUser();
+        }
 
     }
 }

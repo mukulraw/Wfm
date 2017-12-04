@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,17 +59,19 @@ public class Active extends Fragment {
 
     LinearLayout bank , paytm;
 
+    RelativeLayout relativeLayout;
+
     CardView card;
 
     ProgressBar bar;
 
-
-
-
     String payMode;
+
     String value;
 
     List<String> list;
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Nullable
@@ -75,6 +79,20 @@ public class Active extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.active , container , false);
+
+
+        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe);
+
+
+      swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+          @Override
+          public void onRefresh() {
+
+              load();
+          }
+      });
+
+
 
 
         list = new ArrayList<>();
@@ -90,8 +108,6 @@ public class Active extends Fragment {
         card = (CardView) view.findViewById(R.id.card);
 
         mode = (TextView)view.findViewById(R.id.mode);
-
-
 
         paymenttype = (TextView)view.findViewById(R.id.paymenttype);
 
@@ -115,69 +131,9 @@ public class Active extends Fragment {
 
         bar = (ProgressBar) view.findViewById(R.id.progress);
 
+        relativeLayout = (RelativeLayout) view.findViewById(R.id.relative);
 
-        bar.setVisibility(View.VISIBLE);
-
-
-        Log.d("dfklgd" , "flkjh;fg");
-
-        Bean b = (Bean)getContext().getApplicationContext();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.baseURL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        Allapi cr = retrofit.create(Allapi.class);
-        Call<ActiveBean> call = cr.active(b.username);
-        Log.d("hghdf" , b.username);
-
-        call.enqueue(new Callback<ActiveBean>() {
-            @Override
-            public void onResponse(Call<ActiveBean> call, Response<ActiveBean> response) {
-
-
-                Log.d("flfkjslk" , "response");
-
-                Log.d("bgjkhl" , response.body().getStatus());
-
-             date.setText(response.body().getData().getDate());
-             number.setText(response.body().getData().getAWBNo());
-             contact.setText(response.body().getData().getContactNo());
-             address.setText(response.body().getData().getAdddress());
-             name.setText(response.body().getData().getCustomerName());
-             paymenttype.setText(response.body().getData().getPaymenttype());
-             amount.setText("Rs. " + response.body().getData().getAmount());
-
-             if (Objects.equals(response.body().getData().getPaymenttype(), "COD"))
-             {
-
-                 card.setVisibility(View.VISIBLE);
-                 mode.setVisibility(View.VISIBLE);
-
-             }
-             else
-             {
-                 card.setVisibility(View.GONE);
-                 mode.setVisibility(View.GONE);
-
-             }
-
-             bar.setVisibility(View.GONE);
-
-
-            }
-
-            @Override
-            public void onFailure(Call<ActiveBean> call, Throwable t) {
-
-                Log.d("klgklfd" , t.toString());
-
-                bar.setVisibility(View.GONE);
-
-            }
-        });
-
-
+        load();
 
         delivery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +152,6 @@ public class Active extends Fragment {
                 go.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
 
                         dialog.dismiss();
 
@@ -247,8 +202,6 @@ public class Active extends Fragment {
 
 
                         final int battery = easyBatteryMod.getBatteryPercentage();
-
-
 
                         bar.setVisibility(View.VISIBLE);
 
@@ -284,8 +237,6 @@ public class Active extends Fragment {
                     }
                 });
 
-
-
             }
         });
 
@@ -294,7 +245,7 @@ public class Active extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Log.d("gkjg" , "fhjg");
+                Log.d("gkjg", "fhjg");
 
                 final String[] status = {""};
 
@@ -305,11 +256,11 @@ public class Active extends Fragment {
                 dialog.show();
 
 
-                final Spinner search  = (Spinner) dialog.findViewById(R.id.selectdelivery);
-                TextView delivery = (TextView)dialog.findViewById(R.id.confirm);
-                TextView go = (TextView)dialog.findViewById(R.id.go);
+                final Spinner search = (Spinner) dialog.findViewById(R.id.selectdelivery);
+                TextView delivery = (TextView) dialog.findViewById(R.id.confirm);
+                TextView go = (TextView) dialog.findViewById(R.id.go);
 
-                Bean b = (Bean)getContext().getApplicationContext();
+                Bean b = (Bean) getContext().getApplicationContext();
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl(b.baseURL)
                         .addConverterFactory(ScalarsConverterFactory.create())
@@ -323,18 +274,19 @@ public class Active extends Fragment {
                     public void onResponse(Call<UndeliveredBean> call, Response<UndeliveredBean> response) {
 
 
-                         Log.d("hjh" , "response");
+                        Log.d("hjh", "response");
                         list.clear();
 
-                        for (int i = 0 ; i < response.body().getData().size() ; i++)
-                        {
+                        list.add("Select Status");
+
+                        for (int i = 0; i < response.body().getData().size(); i++) {
 
                             list.add(response.body().getData().get(i).getStatus());
 
                         }
 
 
-                        ArrayAdapter aa = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,list);
+                        ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, list);
 
                         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         //Setting the ArrayAdapter data on the Spinner
@@ -347,22 +299,22 @@ public class Active extends Fragment {
                     public void onFailure(Call<UndeliveredBean> call, Throwable t) {
 
 
-                        Log.d("jhfjh" , t.toString());
+                        Log.d("jhfjh", t.toString());
 
 
                     }
                 });
 
 
-
-
-
                 search.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
+                        if (i > 0) {
 
-                        status[0] = list.get(i);
+                            status[0] = list.get(i);
+
+                        }
 
 
                     }
@@ -371,16 +323,8 @@ public class Active extends Fragment {
                     public void onNothingSelected(AdapterView<?> adapterView) {
 
 
-
                     }
                 });
-
-
-
-
-
-
-
 
 
                 go.setOnClickListener(new View.OnClickListener() {
@@ -392,91 +336,90 @@ public class Active extends Fragment {
                 });
 
 
-
                 delivery.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        EasyDeviceMod easyDeviceMod = new EasyDeviceMod(getContext());
+                        if (status[0].length() > 0) {
 
-                        EasyLocationMod easyLocationMod = new EasyLocationMod(getContext());
+                            EasyDeviceMod easyDeviceMod = new EasyDeviceMod(getContext());
 
-                        EasyBatteryMod easyBatteryMod = new EasyBatteryMod(getContext());
+                            EasyLocationMod easyLocationMod = new EasyLocationMod(getContext());
 
-                        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            return;
-                        }
-                        String imei = easyDeviceMod.getIMEI();
+                            EasyBatteryMod easyBatteryMod = new EasyBatteryMod(getContext());
 
-                        String device = easyDeviceMod.getDevice();
+                            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                return;
+                            }
+                            String imei = easyDeviceMod.getIMEI();
 
-                        //Get Lat-Long
-                        double[] l = easyLocationMod.getLatLong();
-                        String lat = String.valueOf(l[0]);
-                        String lon = String.valueOf(l[1]);
+                            String device = easyDeviceMod.getDevice();
 
-
-
-                        if (paytmno.getText().toString().length()>0)
-                        {
-                            value = paytmno.getText().toString();
-                        }
-                        else
-                        {
-                            value = bankname.getText().toString();
-                        }
+                            //Get Lat-Long
+                            double[] l = easyLocationMod.getLatLong();
+                            String lat = String.valueOf(l[0]);
+                            String lon = String.valueOf(l[1]);
 
 
-
-                        final int battery = easyBatteryMod.getBatteryPercentage();
-
-
-
-                        bar.setVisibility(View.VISIBLE);
-
-                        Bean b = (Bean)getContext().getApplicationContext();
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(b.baseURL)
-                                .addConverterFactory(ScalarsConverterFactory.create())
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-                        Allapi cr = retrofit.create(Allapi.class);
-                        Call<UpdateBean> call = cr.order(b.username , number.getText().toString() , payMode, "undelivered" , value , imei , device , lat , lon , String.valueOf(battery) , status[0]);
-
-                        call.enqueue(new Callback<UpdateBean>() {
-                            @Override
-                            public void onResponse(Call<UpdateBean> call, Response<UpdateBean> response) {
-
-
-                                Toast.makeText(getContext(),response.body().getMessage(), Toast.LENGTH_SHORT).show();
-
-                                dialog.dismiss();
-
-                                bar.setVisibility(View.GONE);
-
-
+                            if (paytmno.getText().toString().length() > 0) {
+                                value = paytmno.getText().toString();
+                            } else {
+                                value = bankname.getText().toString();
                             }
 
-                            @Override
-                            public void onFailure(Call<UpdateBean> call, Throwable t) {
 
-                                bar.setVisibility(View.GONE);
+                            final int battery = easyBatteryMod.getBatteryPercentage();
 
-                            }
-                        });
+
+                            bar.setVisibility(View.VISIBLE);
+
+                            Bean b = (Bean) getContext().getApplicationContext();
+                            Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl(b.baseURL)
+                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+                            Allapi cr = retrofit.create(Allapi.class);
+                            Call<UpdateBean> call = cr.order(b.username, number.getText().toString(), payMode, "undelivered", value, imei, device, lat, lon, String.valueOf(battery), status[0]);
+
+                            call.enqueue(new Callback<UpdateBean>() {
+                                @Override
+                                public void onResponse(Call<UpdateBean> call, Response<UpdateBean> response) {
+
+
+                                    Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                                    dialog.dismiss();
+
+                                    bar.setVisibility(View.GONE);
+
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<UpdateBean> call, Throwable t) {
+
+                                    bar.setVisibility(View.GONE);
+
+                                }
+                            });
+
+                        } else {
+
+                            Toast.makeText(getContext(), "Please Select a Status", Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 });
 
             }
-
 
         });
 
@@ -516,12 +459,97 @@ public class Active extends Fragment {
                     paytm.setVisibility(View.GONE);
                 }
 
-
-
             }
         });
 
 
         return view;
+    }
+
+    private void load()
+    {
+
+        bar.setVisibility(View.VISIBLE);
+
+
+        Log.d("dfklgd" , "flkjh;fg");
+
+        Bean b = (Bean)getContext().getApplicationContext();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.baseURL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        Allapi cr = retrofit.create(Allapi.class);
+        Call<ActiveBean> call = cr.active(b.username);
+        Log.d("hghdf" , b.username);
+
+        call.enqueue(new Callback<ActiveBean>() {
+            @Override
+            public void onResponse(Call<ActiveBean> call, Response<ActiveBean> response) {
+
+
+
+                if (response.body().getData().getAWBNo().length()>0){
+
+                    relativeLayout.setVisibility(View.VISIBLE);
+
+                }
+
+                else {
+
+                    Toast.makeText(getContext(), "No active order found", Toast.LENGTH_LONG).show();
+
+                    relativeLayout.setVisibility(View.GONE);
+                }
+
+                Log.d("flfkjslk" , "response");
+
+                Log.d("bgjkhl" , response.body().getStatus());
+
+                date.setText(response.body().getData().getDate());
+                number.setText(response.body().getData().getAWBNo());
+                contact.setText(response.body().getData().getContactNo());
+                address.setText(response.body().getData().getAdddress());
+                name.setText(response.body().getData().getCustomerName());
+                paymenttype.setText(response.body().getData().getPaymenttype());
+                amount.setText("Rs. " + response.body().getData().getAmount());
+
+                if (Objects.equals(response.body().getData().getPaymenttype(), "COD"))
+                {
+
+                    card.setVisibility(View.VISIBLE);
+                    mode.setVisibility(View.VISIBLE);
+
+                }
+                else
+                {
+                    card.setVisibility(View.GONE);
+                    mode.setVisibility(View.GONE);
+
+                }
+
+                bar.setVisibility(View.GONE);
+
+                swipeRefreshLayout.setRefreshing(false);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ActiveBean> call, Throwable t) {
+
+                Log.d("klgklfd" , t.toString());
+
+                bar.setVisibility(View.GONE);
+
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
+
+
+
     }
 }

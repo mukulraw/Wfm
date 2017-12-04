@@ -19,8 +19,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
 
-
-
         </activity>
         <activity android:name=".Splash">
 
@@ -33,26 +31,29 @@
         </activity>
         <activity android:name=".Home">
 
-            <receiver
-                android:name="com.evenzt.receive"
-                android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
-                <intent-filter>
-                    <action android:name="android.intent.action.BOOT_COMPLETED" />
-
-                    <category android:name="android.intent.category.DEFAULT" />
-                </intent-filter>
-            </receiver>
-
-            <service
-                android:name="com.evenzt.NotifyService"
-                android:enabled="true"
-                android:exported="true" />
 
 
 
 
 
         </activity>
+
+        <receiver
+            android:name=".receive"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".NotifyService"
+            android:enabled="true"
+            android:exported="true" />
+
+
     </application>
 
 </manifest>

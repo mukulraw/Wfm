@@ -90,7 +90,14 @@ public class Home extends AppCompatActivity {
 
 
 
+        Intent intent = new Intent(Home.this, NotifyService.class);
+
+        Home.this.startService(intent);
+
     }
+
+
+
 
 
 

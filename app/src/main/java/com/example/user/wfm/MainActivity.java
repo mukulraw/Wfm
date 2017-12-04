@@ -1,7 +1,9 @@
 package com.example.user.wfm;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -39,26 +41,32 @@ public class MainActivity extends AppCompatActivity {
 
     ProgressBar bar;
 
+    SharedPreferences pref;
 
-
+    SharedPreferences.Editor edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
+        edit = pref.edit();
+
         email = (EditText) findViewById(R.id.email);
+
         pass = (EditText) findViewById(R.id.password);
+
         bar = (ProgressBar) findViewById(R.id.progress);
 
-
         sign = (Button) findViewById(R.id.sign);
+
         sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String e = email.getText().toString();
-                String p = pass.getText().toString();
+                final String e = email.getText().toString();
+                final String p = pass.getText().toString();
 
 
                 if (e.length() > 0)
@@ -120,8 +128,14 @@ public class MainActivity extends AppCompatActivity {
                                     Bean b = (Bean)getApplicationContext();
                                     b.username = response.body().getData().getUsername();
 
+
+                                    edit.putString("email" , e);
+                                    edit.putString("pass" , p);
+                                    edit.apply();
+
                                     Intent i = new Intent(MainActivity .this , Home.class);
                                     startActivity(i);
+                                    finish();
 
 
 
@@ -136,10 +150,6 @@ public class MainActivity extends AppCompatActivity {
 
                                 bar.setVisibility(View.GONE);
 
-
-
-
-
                             }
 
                             @Override
@@ -149,12 +159,8 @@ public class MainActivity extends AppCompatActivity {
 
                                 Log.d("hgdlh" , t.toString());
 
-
-
                             }
                         });
-
-
 
                     }
 
@@ -168,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
 
                     Toast.makeText(MainActivity.this, "Please enter a valid Email", Toast.LENGTH_SHORT).show();
                 }
-
 
             }
         });

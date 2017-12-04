@@ -3,12 +3,14 @@ package com.example.user.wfm;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.user.wfm.LoginPOJO.LoginBean;
 import com.example.user.wfm.PreviousPOJO.Datum;
@@ -39,6 +41,7 @@ public class Previous extends Fragment {
     ProgressBar bar;
 
     List<Datum> list;
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
 
@@ -47,6 +50,19 @@ public class Previous extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.previous , container , false);
+
+        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe);
+
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                load();
+            }
+        });
+
+
 
         grid = (RecyclerView)view.findViewById(R.id.grid);
 
@@ -61,6 +77,17 @@ public class Previous extends Fragment {
         grid.setLayoutManager(manager);
 
         grid.setAdapter(adapter);
+
+        load();
+
+
+
+        return view;
+    }
+
+    private void load()
+    {
+
 
         bar.setVisibility(View.VISIBLE);
 
@@ -78,9 +105,30 @@ public class Previous extends Fragment {
             @Override
             public void onResponse(Call<PreviousBean> call, Response<PreviousBean> response) {
 
+
+                if (response.body().getData().size()>0){
+
+                    grid.setVisibility(View.VISIBLE);
+
+
+
+
+                }
+                else {
+
+
+                    Toast.makeText(getContext(), "No Previous order found", Toast.LENGTH_LONG).show();
+
+                    grid.setVisibility(View.GONE);
+                }
+
+
+
                 adapter.setgrid(response.body().getData());
 
                 bar.setVisibility(View.GONE);
+
+                swipeRefreshLayout.setRefreshing(false);
 
 
             }
@@ -90,9 +138,16 @@ public class Previous extends Fragment {
 
                 bar.setVisibility(View.GONE);
 
+                swipeRefreshLayout.setRefreshing(false);
+
             }
         });
 
-        return view;
+
+
+
     }
+
 }
+
+

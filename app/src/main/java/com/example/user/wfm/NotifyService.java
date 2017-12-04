@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
+import android.util.Log;
 
 import com.example.user.wfm.LoginPOJO.LoginBean;
 import com.example.user.wfm.UpdateTrack.UpdateTrackBean;
@@ -50,13 +51,10 @@ public class NotifyService extends Service {
 
                 try{
 
-
-
-
-
-
                     if (cd.isConnectingToInternet())
                     {
+
+
 
                         EasyDeviceMod easyDeviceMod = new EasyDeviceMod(NotifyService.this);
 
@@ -83,10 +81,7 @@ public class NotifyService extends Service {
                         String lat = String.valueOf(l[0]);
                         String lon = String.valueOf(l[1]);
 
-
                         int battery = easyBatteryMod.getBatteryPercentage();
-
-
 
                         Bean b = (Bean) getApplicationContext();
 
@@ -104,31 +99,16 @@ public class NotifyService extends Service {
                             public void onResponse(Call<UpdateTrackBean> call, Response<UpdateTrackBean> response) {
 
 
-
-
                             }
 
                             @Override
                             public void onFailure(Call<UpdateTrackBean> call, Throwable t) {
 
+
                             }
                         });
 
-
-
-
-
-
-
-
-
-
-
                     }
-
-
-
-
 
 
                 }
@@ -137,18 +117,11 @@ public class NotifyService extends Service {
                 }
 
             }
-        }, 0, 1000 * 60 * 5);
+        }, 0, 1000* 60*15);
 
 
 
     }
-
-
-
-
-
-
-
 
     SharedPreferences pref;
     SharedPreferences.Editor edit;
@@ -190,12 +163,6 @@ public class NotifyService extends Service {
             unregisterReceiver(r);
             r=null;
         }
-
-
-
-
-
-
 
     }
 
