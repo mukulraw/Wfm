@@ -79,7 +79,11 @@ public class Progress extends Fragment {
 
                 return new Month();
             }
-            return null;
+            else
+            {
+                return null;
+            }
+
         }
 
         @Override

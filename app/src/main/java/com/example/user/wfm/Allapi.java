@@ -4,6 +4,7 @@ import com.example.user.wfm.ActiveOrdersPOJO.ActiveBean;
 import com.example.user.wfm.LoginPOJO.LoginBean;
 import com.example.user.wfm.OrderUpdatePOJO.OrderUpdateBean;
 import com.example.user.wfm.PreviousPOJO.PreviousBean;
+import com.example.user.wfm.ProgressBarPOJO.ProgressbarBean;
 import com.example.user.wfm.UndeliveredStatusPOJO.UndeliveredBean;
 import com.example.user.wfm.UpdatePOJO.UpdateBean;
 import com.example.user.wfm.UpdateTrack.UpdateTrackBean;
@@ -85,10 +86,16 @@ public interface Allapi {
             @Part("battery") String s,
             @Part("IMEI") String v,
             @Part("deviceId") String i
-
-
     );
 
+
+
+    @Multipart
+    @POST("courier/apiapp/ordergraphbydrivername.php")
+    Call<ProgressbarBean> getProgress (
+            @Part("drivername") String driver ,
+            @Part("time_type") String type
+    );
 
 
 
