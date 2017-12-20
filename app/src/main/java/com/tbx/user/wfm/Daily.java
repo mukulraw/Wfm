@@ -1,13 +1,18 @@
 package com.tbx.user.wfm;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.tbx.user.wfm.ProgressBarPOJO.ProgressbarBean;
 import com.github.mikephil.charting.charts.BarChart;
@@ -29,6 +34,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+import static android.content.Context.LOCATION_SERVICE;
 
 /**
  * Created by USER on 11/28/2017.
@@ -56,104 +63,137 @@ public class Daily extends Fragment {
 
 
 
+        LocationManager locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
 
-        progress.setVisibility(View.VISIBLE);
+            progress.setVisibility(View.VISIBLE);
 
-        Bean b = (Bean) getContext().getApplicationContext();
+            Bean b = (Bean) getContext().getApplicationContext();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.baseURL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(b.baseURL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
-        Allapi cr = retrofit.create(Allapi.class);
-
-
-        Call<ProgressbarBean> call = cr.getProgress(b.username , "daily");
-
-        call.enqueue(new Callback<ProgressbarBean>() {
-            @Override
-            public void onResponse(Call<ProgressbarBean> call, Response<ProgressbarBean> response) {
+            Allapi cr = retrofit.create(Allapi.class);
 
 
+            Call<ProgressbarBean> call = cr.getProgress(b.username, "daily");
 
-                float total = Float.parseFloat(response.body().getData().getTotalOrder());
-                float delivered = Float.parseFloat(response.body().getData().getTotalDeliveredOrder());
-                float undelivered = Float.parseFloat(response.body().getData().getTotalUndeliveredOrder());
-
-
-                Log.d("del" , String.valueOf(delivered));
-                Log.d("undel" , String.valueOf(undelivered));
+            call.enqueue(new Callback<ProgressbarBean>() {
+                @Override
+                public void onResponse(Call<ProgressbarBean> call, Response<ProgressbarBean> response) {
 
 
-                float delPer = (delivered / total) * 100;
-                float undelPer = (undelivered / total) * 100;
+                    float total = Float.parseFloat(response.body().getData().getTotalOrder());
+                    float delivered = Float.parseFloat(response.body().getData().getTotalDeliveredOrder());
+                    float undelivered = Float.parseFloat(response.body().getData().getTotalUndeliveredOrder());
 
 
-                Log.d("asdasd" , String.valueOf(delPer));
-                Log.d("asdasd" , String.valueOf(undelPer));
-
-                float amount = Float.parseFloat(response.body().getData().getTotalCollectableAmount());
+                    Log.d("del", String.valueOf(delivered));
+                    Log.d("undel", String.valueOf(undelivered));
 
 
-                if (total > 0)
-                {
-
-                    List<Entry> pieEntries = new ArrayList<>();
-
-                    pieEntries.add(new Entry(delPer , 0));
-                    pieEntries.add(new Entry(undelPer,1));
-
-                    final List<String> labels = new ArrayList<>();
-
-                    labels.add("Delivered");
-                    labels.add("Undelivered");
+                    float delPer = (delivered / total) * 100;
+                    float undelPer = (undelivered / total) * 100;
 
 
-                    PieDataSet pieDataSet = new PieDataSet(pieEntries , "");
-                    pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+                    Log.d("asdasd", String.valueOf(delPer));
+                    Log.d("asdasd", String.valueOf(undelPer));
 
-                    PieData pd = new PieData( labels, pieDataSet);
-
-                    pieChart.setData(pd);
-
-                    ArrayList<BarEntry> bargroup1 = new ArrayList<>();
-                    bargroup1.add(new BarEntry(amount, 0));
+                    float amount = Float.parseFloat(response.body().getData().getTotalCollectableAmount());
 
 
+                    if (total > 0) {
 
-                    BarDataSet barDataSet1 = new BarDataSet(bargroup1, "Collected Amount");
-                    barDataSet1.setColors(ColorTemplate.JOYFUL_COLORS);
+                        List<Entry> pieEntries = new ArrayList<>();
 
-                    ArrayList<BarDataSet> dataSets = new ArrayList<>();  // combined all dataset into an arraylist
-                    dataSets.add(barDataSet1);
+                        pieEntries.add(new Entry(delPer, 0));
+                        pieEntries.add(new Entry(undelPer, 1));
 
-                    final List<String> labels2 = new ArrayList<>();
+                        final List<String> labels = new ArrayList<>();
 
-                    labels2.add("Today's amount");
+                        labels.add("Delivered");
+                        labels.add("Undelivered");
 
-                    BarData data = new BarData(labels2, dataSets);
-                    chart.setData(data);
+
+                        PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
+                        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+
+                        PieData pd = new PieData(labels, pieDataSet);
+
+                        pieChart.setData(pd);
+
+                        ArrayList<BarEntry> bargroup1 = new ArrayList<>();
+                        bargroup1.add(new BarEntry(amount, 0));
+
+
+                        BarDataSet barDataSet1 = new BarDataSet(bargroup1, "Collected Amount");
+                        barDataSet1.setColors(ColorTemplate.JOYFUL_COLORS);
+
+                        ArrayList<BarDataSet> dataSets = new ArrayList<>();  // combined all dataset into an arraylist
+                        dataSets.add(barDataSet1);
+
+                        final List<String> labels2 = new ArrayList<>();
+
+                        labels2.add("Today's amount");
+
+                        BarData data = new BarData(labels2, dataSets);
+                        chart.setData(data);
+
+                    }
+
+
+                    progress.setVisibility(View.GONE);
+
 
                 }
 
+                @Override
+                public void onFailure(Call<ProgressbarBean> call, Throwable t) {
+                    progress.setVisibility(View.GONE);
+                }
+            });
 
-                progress.setVisibility(View.GONE);
+        }
 
+        else {
 
-            }
-
-            @Override
-            public void onFailure(Call<ProgressbarBean> call, Throwable t) {
-                progress.setVisibility(View.GONE);
-            }
-        });
+            showGPSDisabledAlertToUser();
+        }
 
 
 
 
         return view;
     }
+
+    private void showGPSDisabledAlertToUser(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Goto Settings Page To Enable GPS",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivityForResult(callGPSSettingIntent , 12);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        Toast.makeText(getContext() , "GPS is required for this app", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                        getActivity().finish();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+
 }

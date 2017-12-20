@@ -55,6 +55,9 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.MyView
         holder.type.setText(item.getPaymenttype());
         holder.mode.setText(item.getPaymentMode());
         holder.bankname.setText(item.getValue());
+        holder.date1.setText(item.getDate());
+        holder.success.setText(item.getStatus());
+
 
 
         holder.down.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +97,7 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
 
-        TextView name  , contact , address , date , number  , bankname , type , mode;
+        TextView name  , contact , address , date , number  , bankname , type , mode , pm , date1 , success;
 
         ImageView down;
 
@@ -117,6 +120,12 @@ public class PreviousAdapter extends RecyclerView.Adapter<PreviousAdapter.MyView
             type = (TextView)itemView.findViewById(R.id.type);
 
             mode = (TextView)itemView.findViewById(R.id.mode);
+
+            pm = (TextView)itemView.findViewById(R.id.pm);
+
+            date1 = (TextView)itemView.findViewById(R.id.date1);
+
+            success = (TextView)itemView.findViewById(R.id.success);
 
             bankname = (TextView)itemView.findViewById(R.id.bankname);
 

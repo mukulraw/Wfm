@@ -1,9 +1,13 @@
 package com.tbx.user.wfm;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,6 +28,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+import static android.content.Context.LOCATION_SERVICE;
 
 /**
  * Created by USER on 11/27/2017.
@@ -86,65 +92,95 @@ public class Previous extends Fragment {
 
     private void load()
     {
+        LocationManager locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
 
-        bar.setVisibility(View.VISIBLE);
+            bar.setVisibility(View.VISIBLE);
 
-        Bean b = (Bean)getContext().getApplicationContext();
+            Bean b = (Bean) getContext().getApplicationContext();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.baseURL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        Allapi cr = retrofit.create(Allapi.class);
-        Call<PreviousBean> call = cr.previous(b.username);
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(b.baseURL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            Allapi cr = retrofit.create(Allapi.class);
+            Call<PreviousBean> call = cr.previous(b.username);
 
-        call.enqueue(new Callback<PreviousBean>() {
-            @Override
-            public void onResponse(Call<PreviousBean> call, Response<PreviousBean> response) {
-
-
-                if (response.body().getData().size()>0){
-
-                    grid.setVisibility(View.VISIBLE);
+            call.enqueue(new Callback<PreviousBean>() {
+                @Override
+                public void onResponse(Call<PreviousBean> call, Response<PreviousBean> response) {
 
 
+                    if (response.body().getData().size() > 0) {
+
+                        grid.setVisibility(View.VISIBLE);
+
+
+                    } else {
+
+
+                        Toast.makeText(getContext(), "No Previous order found", Toast.LENGTH_LONG).show();
+
+                        grid.setVisibility(View.GONE);
+                    }
+
+
+                    adapter.setgrid(response.body().getData());
+
+                    bar.setVisibility(View.GONE);
+
+                    swipeRefreshLayout.setRefreshing(false);
 
 
                 }
-                else {
 
+                @Override
+                public void onFailure(Call<PreviousBean> call, Throwable t) {
 
-                    Toast.makeText(getContext(), "No Previous order found", Toast.LENGTH_LONG).show();
+                    bar.setVisibility(View.GONE);
 
-                    grid.setVisibility(View.GONE);
+                    swipeRefreshLayout.setRefreshing(false);
+
                 }
+            });
+
+        }
+        else {
+
+            showGPSDisabledAlertToUser();
+        }
 
 
-
-                adapter.setgrid(response.body().getData());
-
-                bar.setVisibility(View.GONE);
-
-                swipeRefreshLayout.setRefreshing(false);
-
-
-            }
-
-            @Override
-            public void onFailure(Call<PreviousBean> call, Throwable t) {
-
-                bar.setVisibility(View.GONE);
-
-                swipeRefreshLayout.setRefreshing(false);
-
-            }
-        });
+    }
 
 
 
 
+    private void showGPSDisabledAlertToUser(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Goto Settings Page To Enable GPS",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivityForResult(callGPSSettingIntent , 12);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        Toast.makeText(getContext() , "GPS is required for this app", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                        getActivity().finish();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 
 }

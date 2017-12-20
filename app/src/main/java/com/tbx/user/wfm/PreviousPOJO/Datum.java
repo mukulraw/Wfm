@@ -39,6 +39,9 @@ public class Datum {
     @SerializedName("undeliveredRemark")
     @Expose
     private String undeliveredRemark;
+    @SerializedName("status")
+    @Expose
+    private String status;
 
     public String getAWBNo() {
         return aWBNo;
@@ -119,4 +122,13 @@ public class Datum {
     public void setUndeliveredRemark(String undeliveredRemark) {
         this.undeliveredRemark = undeliveredRemark;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 }

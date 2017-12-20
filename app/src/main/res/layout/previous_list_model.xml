@@ -72,7 +72,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="12500325"
                     android:id="@+id/number"
                     android:textColor="#000"/>
 
@@ -127,7 +126,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="12 May 2017"
                     android:gravity="center"
                     android:id="@+id/date"
                     android:layout_gravity="center_vertical"
@@ -369,7 +367,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="SUCCESS"
+                    android:id="@+id/success"
                     android:textStyle="bold"
                     android:textColor="#558B2F"
                     android:layout_gravity="center"
@@ -388,7 +386,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="20 May 2017"
                     android:id="@+id/date1"
                     android:textColor="#000"/>
 
@@ -406,8 +403,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="12:30P.M"
                     android:id="@+id/pm"
+                    android:visibility="gone"
                     />
 
             </LinearLayout>
