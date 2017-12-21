@@ -151,6 +151,7 @@ public class Weekly extends Fragment {
                 @Override
                 public void onFailure(Call<ProgressbarBean> call, Throwable t) {
                     progress.setVisibility(View.GONE);
+
                 }
             });
 
