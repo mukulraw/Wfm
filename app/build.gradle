@@ -11,7 +11,7 @@ android {
     }
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.tbx.user.wfm"
+        applicationId "com.tbx.user.SecuraEx"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1

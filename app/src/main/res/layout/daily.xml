@@ -34,10 +34,17 @@
                 app:cardUseCompatPadding="true">
 
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/barchart"
+
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="250dp" />
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="#7CB342"
+                    android:textSize="34sp"
+                    android:padding="18dp"
+                    android:id="@+id/total"
+                    />
+
 
 
             </android.support.v7.widget.CardView>

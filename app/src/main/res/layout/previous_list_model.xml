@@ -200,7 +200,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Mukul Rawat"
                     android:textColor="#808080"
                     android:id="@+id/name"
                     />
@@ -264,7 +263,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="+919650698131"
                     android:id="@+id/contact"
                     android:textColor="#808080"
                     />
@@ -324,13 +322,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_weight="3">
+                android:layout_weight="2.5">
 
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Guru Ravidass nagar"
                     android:id="@+id/address"
                     android:textColor="#808080"
                     />
@@ -521,7 +518,6 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cash On Delivery"
                         android:layout_gravity="center"
                         android:id="@+id/type"
                         />
@@ -539,7 +535,6 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Card"
                         android:id="@+id/mode"
                         />
 
@@ -555,7 +550,6 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="SBI"
                         android:id="@+id/bankname"
                         />
 
