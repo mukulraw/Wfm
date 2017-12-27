@@ -61,13 +61,20 @@ public class Splash extends AppCompatActivity implements LocationListener {
         setContentView(R.layout.activity_splash);
 
 
+
+
+
+        pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
+
+        bar = (ProgressBar) findViewById(R.id.progress);
+
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
 
         Criteria criteria = new Criteria();
 
 
-        String mprovider = locationManager.getBestProvider(criteria, false);
+        //String mprovider = locationManager.getBestProvider(criteria, false);
 
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -80,16 +87,13 @@ public class Splash extends AppCompatActivity implements LocationListener {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        location = locationManager.getLastKnownLocation(mprovider);
-        locationManager.requestLocationUpdates(mprovider, 15000, 1, this);
+        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
-
-
-        pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
-
-        bar = (ProgressBar) findViewById(R.id.progress);
 
         if (hasPermissions(this, PERMISSIONS)) {
+
+
 
             startApp();
 
@@ -314,6 +318,8 @@ public class Splash extends AppCompatActivity implements LocationListener {
     public void onLocationChanged(Location location) {
 
         this.location = location;
+
+        Log.d("asdasd" , String.valueOf(location.getLatitude()));
 
     }
 

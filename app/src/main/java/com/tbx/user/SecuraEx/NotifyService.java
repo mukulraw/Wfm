@@ -12,8 +12,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 import com.tbx.user.SecuraEx.UpdateTrack.UpdateTrackBean;
 
@@ -46,6 +48,7 @@ public class NotifyService extends Service implements LocationListener {
             public void run() {
 
 
+                //Log.d("asdasd" , "asdasdasd");
 
                 try{
 
@@ -71,34 +74,17 @@ public class NotifyService extends Service implements LocationListener {
                             // for ActivityCompat#requestPermissions for more details.
                             return;
                         }
-                        location = locationManager.getLastKnownLocation(mprovider);
-                        locationManager.requestLocationUpdates(mprovider, 15000, 1, new LocationListener() {
-                            @Override
-                            public void onLocationChanged(Location location) {
-                                NotifyService.this.location = location;
-                            }
-
-                            @Override
-                            public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                            }
-
-                            @Override
-                            public void onProviderEnabled(String s) {
-
-                            }
-
-                            @Override
-                            public void onProviderDisabled(String s) {
-
-                            }
-                        });
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, NotifyService.this , Looper.getMainLooper());
 
 
                         final String lat1 = String.valueOf(location.getLatitude());
                         final String lng1 = String.valueOf(location.getLongitude());
 
 
+                        Log.d("asda" , lat1);
+                        Log.d("asda" , lng1);
+                        Log.d("asda" , "asdasd");
 
 
                         EasyDeviceMod easyDeviceMod = new EasyDeviceMod(NotifyService.this);
@@ -159,6 +145,7 @@ public class NotifyService extends Service implements LocationListener {
                 }
                 catch (Exception e) {
                     // TODO: handle exception
+                    e.printStackTrace();
                 }
 
             }

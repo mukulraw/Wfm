@@ -113,8 +113,8 @@ public class Active extends Fragment implements LocationListener{
             // for ActivityCompat#requestPermissions for more details.
             return null;
         }
-        location = locationManager.getLastKnownLocation(mprovider);
-        locationManager.requestLocationUpdates(mprovider, 15000, 1, this);
+        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
 
 
