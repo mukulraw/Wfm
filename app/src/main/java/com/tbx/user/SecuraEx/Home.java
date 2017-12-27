@@ -27,7 +27,7 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
 
-        pref = getSharedPreferences("hjdf" , MODE_PRIVATE);
+        pref = getSharedPreferences("pref" , MODE_PRIVATE);
         edit = pref.edit();
 
         bar = (ImageView) findViewById(R.id.bar);
@@ -39,6 +39,10 @@ public class Home extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                edit.remove("email");
+                edit.remove("pass");
+                edit.apply();
 
                 Intent i = new Intent(Home.this , MainActivity.class);
                 startActivity(i);

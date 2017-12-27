@@ -53,12 +53,16 @@ public class Previous extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
 
 
+    ConnectionDetector cd;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.previous , container , false);
+
+        cd = new ConnectionDetector(getContext());
 
         swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe);
 
@@ -118,7 +122,7 @@ public class Previous extends Fragment {
     {
         LocationManager locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
 
-        if (isDeviceLocationEnabled(getContext())) {
+        if (cd.isConnectingToInternet()) {
 
 
             bar.setVisibility(View.VISIBLE);
@@ -174,7 +178,7 @@ public class Previous extends Fragment {
         }
         else {
 
-            showGPSDisabledAlertToUser();
+            Toast.makeText(getContext() , "No Internet Connection" , Toast.LENGTH_SHORT).show();
         }
 
 

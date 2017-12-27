@@ -509,6 +509,7 @@
                             android:layout_marginStart="10dp"
                             android:hint="Enter bank name"
                             android:padding="10dp"
+                            android:inputType="textCapCharacters"
                             android:textColor="#696969"
                             android:textColorHint="#a1a0a0"
                             android:textSize="15sp" />
@@ -557,6 +558,7 @@
                             android:layout_marginStart="10dp"
                             android:hint="Enter Paytm No."
                             android:padding="10dp"
+                            android:inputType="number"
                             android:textColor="#696969"
                             android:textColorHint="#a1a0a0"
                             android:textSize="15sp" />

@@ -51,6 +51,7 @@ public class Splash extends AppCompatActivity implements LocationListener {
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     String[] PERMISSIONS = {android.Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE};
 
+    ConnectionDetector cd;
 
     Location location;
 
@@ -62,38 +63,39 @@ public class Splash extends AppCompatActivity implements LocationListener {
 
 
 
+        cd = new ConnectionDetector(Splash.this);
 
 
         pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
 
         bar = (ProgressBar) findViewById(R.id.progress);
 
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-
-        Criteria criteria = new Criteria();
-
-
-        //String mprovider = locationManager.getBestProvider(criteria, false);
-
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
 
         if (hasPermissions(this, PERMISSIONS)) {
 
+            /*LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+
+            Criteria criteria = new Criteria();
+
+
+            //String mprovider = locationManager.getBestProvider(criteria, false);
+
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+*/
 
             startApp();
 
@@ -101,6 +103,9 @@ public class Splash extends AppCompatActivity implements LocationListener {
         } else {
             ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_CODE_ASK_PERMISSIONS);
         }
+
+
+
 
 
     }
@@ -122,9 +127,33 @@ public class Splash extends AppCompatActivity implements LocationListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == REQUEST_CODE_ASK_PERMISSIONS) {
-            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                //startApp();
+                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+
+                Criteria criteria = new Criteria();
+
+
+                //String mprovider = locationManager.getBestProvider(criteria, false);
+
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
                 startApp();
+
 
             } else {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
@@ -172,6 +201,48 @@ public class Splash extends AppCompatActivity implements LocationListener {
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 12)
+        {
+            Log.d("asdasd" , "asdasasd");
+
+            if (hasPermissions(this, PERMISSIONS)) {
+                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+
+                Criteria criteria = new Criteria();
+
+
+                //String mprovider = locationManager.getBestProvider(criteria, false);
+
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+
+
+                startApp();
+
+
+            } else {
+                ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_CODE_ASK_PERMISSIONS);
+            }
+        }
+
+    }
+
     public static boolean isDeviceLocationEnabled(Context mContext) {
         int locMode = 0;
         String locProviders;
@@ -194,123 +265,131 @@ public class Splash extends AppCompatActivity implements LocationListener {
     public void startApp() {
 
 
+        if (cd.isConnectingToInternet())
+        {
+            if (isDeviceLocationEnabled(Splash.this)) {
 
 
-        if (location != null) {
+                Log.d("asdasd" , "Asdad");
+
+                //Log.d("lat1" , String.valueOf(location.getLatitude()));
+                //Log.d("lng1" , String.valueOf(location.getLongitude()));
+
+                //String lat1 = String.valueOf(location.getLatitude());
+                //String lng1 = String.valueOf(location.getLongitude());
+
+                String e = pref.getString("email", "");
+                String p = pref.getString("pass", "");
 
 
-            Log.d("asdasd" , "Asdad");
-
-            Log.d("lat1" , String.valueOf(location.getLatitude()));
-            Log.d("lng1" , String.valueOf(location.getLongitude()));
-
-            String lat1 = String.valueOf(location.getLatitude());
-            String lng1 = String.valueOf(location.getLongitude());
-
-            String e = pref.getString("email", "");
-            String p = pref.getString("pass", "");
+                if (e.length() > 0 && p.length() > 0) {
 
 
-            if (e.length() > 0 && p.length() > 0) {
+                    EasyDeviceMod easyDeviceMod = new EasyDeviceMod(Splash.this);
+
+                    EasyLocationMod easyLocationMod = new EasyLocationMod(Splash.this);
+
+                    EasyBatteryMod easyBatteryMod = new EasyBatteryMod(Splash.this);
+
+                    if (ActivityCompat.checkSelfPermission(Splash.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    String imei = easyDeviceMod.getIMEI();
+
+                    String device = easyDeviceMod.getDevice();
+
+                    //Get Lat-Long
+                    double[] l = easyLocationMod.getLatLong();
+                    String lat = String.valueOf(l[0]);
+                    String lon = String.valueOf(l[1]);
 
 
-                EasyDeviceMod easyDeviceMod = new EasyDeviceMod(Splash.this);
+                    int battery = easyBatteryMod.getBatteryPercentage();
 
-                EasyLocationMod easyLocationMod = new EasyLocationMod(Splash.this);
+                    bar.setVisibility(View.VISIBLE);
 
-                EasyBatteryMod easyBatteryMod = new EasyBatteryMod(Splash.this);
+                    Log.d("lkghb", "gfjkl");
 
-                if (ActivityCompat.checkSelfPermission(Splash.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                String imei = easyDeviceMod.getIMEI();
+                    Bean b = (Bean) getApplicationContext();
 
-                String device = easyDeviceMod.getDevice();
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(b.baseURL)
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
 
-                //Get Lat-Long
-                double[] l = easyLocationMod.getLatLong();
-                String lat = String.valueOf(l[0]);
-                String lon = String.valueOf(l[1]);
+                    Allapi cr = retrofit.create(Allapi.class);
+                    Call<LoginBean> call = cr.login(e , p , imei , device , lat , lon , String.valueOf(battery));
+
+                    call.enqueue(new Callback<LoginBean>() {
+                        @Override
+                        public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
+
+                            Log.d("lkjfdgh", "response");
+
+                            if (Objects.equals(response.body().getStatus(), "1"))
+
+                            {
+
+                                Toast.makeText(Splash.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                                Bean b = (Bean) getApplicationContext();
+                                b.username = response.body().getData().getUsername();
+
+                                Intent i = new Intent(Splash.this, Home.class);
+                                startActivity(i);
+                                finish();
+
+                                bar.setVisibility(View.GONE);
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<LoginBean> call, Throwable t) {
+
+                            bar.setVisibility(View.GONE);
+
+                            Log.d("hgf", t.toString());
+
+                        }
+                    });
+
+                } else {
 
 
-                int battery = easyBatteryMod.getBatteryPercentage();
+                    time = new Timer();
+                    time.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
 
-                bar.setVisibility(View.VISIBLE);
-
-                Log.d("lkghb", "gfjkl");
-
-                Bean b = (Bean) getApplicationContext();
-
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.baseURL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                Allapi cr = retrofit.create(Allapi.class);
-                Call<LoginBean> call = cr.login(e , p , imei , device , lat1 , lng1 , String.valueOf(battery));
-
-                call.enqueue(new Callback<LoginBean>() {
-                    @Override
-                    public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
-
-                        Log.d("lkjfdgh", "response");
-
-                        if (Objects.equals(response.body().getStatus(), "1"))
-
-                        {
-
-                            Toast.makeText(Splash.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-
-                            Bean b = (Bean) getApplicationContext();
-                            b.username = response.body().getData().getUsername();
-
-                            Intent i = new Intent(Splash.this, Home.class);
+                            Intent i = new Intent(Splash.this, MainActivity.class);
                             startActivity(i);
                             finish();
 
-                            bar.setVisibility(View.GONE);
                         }
+                    }, 1500);
 
-                    }
-
-                    @Override
-                    public void onFailure(Call<LoginBean> call, Throwable t) {
-
-                        bar.setVisibility(View.GONE);
-
-                        Log.d("hgf", t.toString());
-
-                    }
-                });
+                }
 
             } else {
-
-
-                time = new Timer();
-                time.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-
-                        Intent i = new Intent(Splash.this, MainActivity.class);
-                        startActivity(i);
-                        finish();
-
-                    }
-                }, 1500);
-
+                showGPSDisabledAlertToUser();
             }
-
-        } else {
-            showGPSDisabledAlertToUser();
         }
+        else
+        {
+            Toast.makeText(Splash.this , "No Internet Connection" , Toast.LENGTH_SHORT).show();
+        }
+
+
+
 
     }
 
@@ -319,7 +398,9 @@ public class Splash extends AppCompatActivity implements LocationListener {
 
         this.location = location;
 
-        Log.d("asdasd" , String.valueOf(location.getLatitude()));
+        //startApp();
+
+        //Log.d("asdasd" , String.valueOf(location.getLatitude()));
 
     }
 
