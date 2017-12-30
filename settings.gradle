@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':locationapi-release_0.9.0'

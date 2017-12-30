@@ -6,7 +6,8 @@
       <module fileurl="file://D:\AndroidStudioProjects\Wfm\Wfm.iml" filepath="D:\AndroidStudioProjects\Wfm\Wfm.iml" />
       <module fileurl="file://E:\New folder\courier\.idea\Wfm.iml" filepath="E:\New folder\courier\.idea\Wfm.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/courier.iml" filepath="$PROJECT_DIR$/courier.iml" />
+      <module fileurl="file://D:\AndroidStudioProjects\Wfm\courier.iml" filepath="D:\AndroidStudioProjects\Wfm\courier.iml" />
+      <module fileurl="file://$PROJECT_DIR$/locationapi-release_0.9.0/locationapi-release_0.9.0.iml" filepath="$PROJECT_DIR$/locationapi-release_0.9.0/locationapi-release_0.9.0.iml" />
     </modules>
   </component>
 </project>
